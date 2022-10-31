@@ -22,7 +22,7 @@ struct ContentView: View {
         Button("Start!"){
             self.count = 0
             self.mode = "WORKING"
-            confetti()
+            confetti3()
         }
         Button("Stop!"){
             self.count = 0
@@ -36,12 +36,12 @@ struct ContentView: View {
             if mode == "WORKING" && count > workEndTime {
                 mode = "BREAK"
                 count = 0
-                confetti()
+                confetti3()
             }
             if mode == "BREAK" && count > breakEndTime {
                 mode = "WORKING"
                 count = 0
-                confetti()
+                confetti3()
             }
         }
     }
@@ -51,6 +51,12 @@ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
     }
+}
+
+fileprivate func confetti3() {
+    confetti()
+    confetti()
+    confetti()
 }
 
 // cmd + j is my raycast confetti shortcut
