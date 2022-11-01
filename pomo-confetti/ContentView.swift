@@ -22,7 +22,7 @@ struct ContentView: View {
         Button("Start!"){
             self.count = 0
             self.mode = "WORKING"
-            confetti3()
+            confetti()
         }
         Button("Stop!"){
             self.count = 0
@@ -36,12 +36,12 @@ struct ContentView: View {
             if mode == "WORKING" && count > workEndTime {
                 mode = "BREAK"
                 count = 0
-                confetti3()
+                confetti()
             }
             if mode == "BREAK" && count > breakEndTime {
                 mode = "WORKING"
                 count = 0
-                confetti3()
+                confetti()
             }
         }
     }
@@ -53,34 +53,29 @@ struct ContentView_Previews: PreviewProvider {
     }
 }
 
-fileprivate func confetti3() {
-    confetti()
-    confetti()
-    confetti()
+fileprivate func confetti() {
+    inputShortcutKey()
+    inputShortcutKey()
+    inputShortcutKey()
 }
 
 // cmd + j is my raycast confetti shortcut
-fileprivate func confetti() {
-    NSLog("confetti")
+fileprivate func inputShortcutKey() {
     let source = CGEventSource(stateID: CGEventSourceStateID.hidSystemState)
 
-    let cmdKey: UInt16 = 0x38
-    let jkey: UInt16 = 0x26
-
-    let cmdDown = CGEvent(keyboardEventSource: source, virtualKey: cmdKey, keyDown: true)
-    let cmdUp = CGEvent(keyboardEventSource: source, virtualKey: cmdKey, keyDown: false)
-    let keyJDown = CGEvent(keyboardEventSource: source, virtualKey: jkey, keyDown: true)
-    let keyJUp = CGEvent(keyboardEventSource: source, virtualKey: jkey, keyDown: false)
-    
+    //cmd:  0x38, j: 0x26
+    let keys: Array<UInt16> = [0x38, 0x26]
     let loc = CGEventTapLocation.cghidEventTap
-
-    cmdDown?.flags = CGEventFlags.maskCommand
-    cmdUp?.flags = CGEventFlags.maskCommand
-    keyJDown?.flags = CGEventFlags.maskCommand
-    keyJUp?.flags = CGEventFlags.maskCommand
-
-    cmdDown?.post(tap: loc)
-    keyJDown?.post(tap: loc)
-    cmdUp?.post(tap: loc)
-    keyJUp?.post(tap: loc)
+    
+    for key in keys {
+        let keyDown = CGEvent(keyboardEventSource: source, virtualKey: key, keyDown: true)
+        keyDown?.flags = CGEventFlags.maskCommand
+        keyDown?.post(tap: loc)
+    }
+    
+    for key in keys.reversed() {
+        let keyDUp = CGEvent(keyboardEventSource: source, virtualKey: key, keyDown: false)
+        keyDUp?.flags = CGEventFlags.maskCommand
+        keyDUp?.post(tap: loc)
+    }
 }
