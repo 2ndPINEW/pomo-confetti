@@ -12,8 +12,8 @@ struct ContentView: View {
     @State var mode: String = "STOP"
     private let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
-    var workEndTime: Int = 25 * 60
-    var breakEndTime: Int = 5 * 60
+    let workEndTime: Int = 25 * 60
+    let breakEndTime: Int = 5 * 60
     
     var body: some View {
         Text("\(mode)")
